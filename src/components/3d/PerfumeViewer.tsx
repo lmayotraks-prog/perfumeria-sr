@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { usePerfumeStore } from '@/hooks/usePerfumeStore';
 import { HD_CATALOG_IMAGES } from '@/data/hdCatalogImages';
+import { withBasePath } from '@/lib/assetPath';
 
 export interface PerfumeViewerProps {
   variant?: 'cinematic' | 'modal';
@@ -319,7 +320,7 @@ export default function PerfumeViewer({ variant = 'cinematic' }: PerfumeViewerPr
   const { state, dispatch } = usePerfumeStore();
   const { activePerfume, ui } = state;
   const isNocturne = ui.ambiance === 'nocturne';
-  const realImageUrl = HD_CATALOG_IMAGES[activePerfume.id] || activePerfume.imageUrl;
+  const realImageUrl = withBasePath(HD_CATALOG_IMAGES[activePerfume.id] || activePerfume.imageUrl || '');
   const hasRealImage = Boolean(realImageUrl);
   const effectiveMode =
     variant === 'cinematic'
@@ -1051,7 +1052,7 @@ export default function PerfumeViewer({ variant = 'cinematic' }: PerfumeViewerPr
     };
   }, []);
 
-  const videoSrc = isNocturne ? '/videos/perfume-reference.mp4' : '/videos/perfume-lumiere.mp4';
+  const videoSrc = withBasePath(isNocturne ? '/videos/perfume-reference.mp4' : '/videos/perfume-lumiere.mp4');
 
   return (
     <div ref={containerRef} className="relative w-full h-full overflow-hidden select-none">

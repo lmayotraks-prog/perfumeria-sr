@@ -1,12 +1,14 @@
 // src/data/availableCatalog.ts — Catálogo Real Disponible de SR Essences (218 referencias importadas)
 import availableRaw from './available-catalog.json';
+import { getCatalogBottleSrc } from './hdCatalogImages';
 import { Perfume } from './perfumes';
+import { withBasePath } from '@/lib/assetPath';
 import { DepartmentMode } from '@/types';
 
 export const AVAILABLE_PERFUMES: Perfume[] = ((availableRaw.perfumes || []) as Perfume[]).map(
   (p) => ({
     ...p,
-    imageUrl: `/api/catalog-image/${p.id}`,
+    imageUrl: withBasePath(getCatalogBottleSrc(p)),
   })
 );
 

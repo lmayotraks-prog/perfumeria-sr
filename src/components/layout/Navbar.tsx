@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { usePerfumeStore } from '@/hooks/usePerfumeStore';
 import { DAMA_PERFUMES, CABALLERO_PERFUMES } from '@/data/availableCatalog';
 import { SR_CONTACT, buildBagWhatsAppUrl, buildPerfumeWhatsAppUrl } from '@/lib/whatsapp';
+import { withBasePath } from '@/lib/assetPath';
 import { AppView } from '@/types';
 
 export default function Navbar() {
@@ -108,7 +109,7 @@ export default function Navbar() {
               >
                 {isNocturne ? (
                   <Image
-                    src="/images/logo/sr-essences-logo.jpeg"
+                    src={withBasePath('/images/logo/sr-essences-logo.jpeg')}
                     alt="SR Essences"
                     fill
                     className="object-cover"
@@ -116,7 +117,7 @@ export default function Navbar() {
                   />
                 ) : (
                   <Image
-                    src="/images/textures/fondo-blanco.jpg"
+                    src={withBasePath('/images/textures/fondo-blanco.jpg')}
                     alt="SR Essences"
                     fill
                     className="object-contain mix-blend-multiply scale-125"

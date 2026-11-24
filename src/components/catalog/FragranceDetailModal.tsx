@@ -6,6 +6,8 @@ import { Perfume } from '@/types';
 import { usePerfumeStore } from '@/hooks/usePerfumeStore';
 import { translateAccord, translateNote, getAccordColor } from '@/lib/olfactoryDictionary';
 import { buildPerfumeWhatsAppUrl } from '@/lib/whatsapp';
+import { IS_STATIC_EXPORT } from '@/lib/assetPath';
+import { queryEncyclopediaSimilar } from '@/lib/clientEncyclopedia';
 import StarRating from '@/components/ui/StarRating';
 import IntensityBar from '@/components/ui/IntensityBar';
 
@@ -60,6 +62,26 @@ export default function FragranceDetailModal() {
     }
     const controller = new AbortController();
     setLoadingSimilar(true);
+
+    if (IS_STATIC_EXPORT) {
+      queryEncyclopediaSimilar(
+        perfume.id,
+        perfume.accords.map((a) => a.name),
+        perfume.notes.map((n) => n.name),
+        perfume.family
+      )
+        .then((json) => {
+          if (!controller.signal.aborted) setSimilar(json.items || []);
+        })
+        .catch((err) => {
+          console.error('Error cargando similares:', err);
+        })
+        .finally(() => {
+          if (!controller.signal.aborted) setLoadingSimilar(false);
+        });
+
+      return () => controller.abort();
+    }
 
     const params = new URLSearchParams({
       similarTo: perfume.id,

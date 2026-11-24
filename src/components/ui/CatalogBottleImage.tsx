@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Perfume } from '@/types';
 import { HD_CATALOG_IMAGES } from '@/data/hdCatalogImages';
+import { withBasePath } from '@/lib/assetPath';
 
 interface CatalogBottleImageProps {
   perfume: Perfume;
@@ -17,9 +18,11 @@ export default function CatalogBottleImage({
 }: CatalogBottleImageProps) {
   const deptFolder = perfume.gender === 'femenino' ? 'dama' : 'caballero';
   const fallbackSrc = perfume.available
-    ? `/images/catalog/${deptFolder}/${perfume.id}.png`
-    : perfume.imageUrl || '';
-  const staticHdSrc = HD_CATALOG_IMAGES[perfume.id];
+    ? withBasePath(`/images/catalog/${deptFolder}/${perfume.id}.png`)
+    : withBasePath(perfume.imageUrl || '');
+  const staticHdSrc = HD_CATALOG_IMAGES[perfume.id]
+    ? withBasePath(HD_CATALOG_IMAGES[perfume.id])
+    : '';
   const primarySrc = staticHdSrc || fallbackSrc;
 
   const imgRef = useRef<HTMLImageElement>(null);

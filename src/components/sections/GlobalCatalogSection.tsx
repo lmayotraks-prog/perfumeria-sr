@@ -11,6 +11,8 @@ import {
   getAccordColor,
 } from '@/lib/olfactoryDictionary';
 import { buildPerfumeWhatsAppUrl } from '@/lib/whatsapp';
+import { IS_STATIC_EXPORT } from '@/lib/assetPath';
+import { queryEncyclopediaMeta, queryEncyclopediaSearch } from '@/lib/clientEncyclopedia';
 import StarRating from '@/components/ui/StarRating';
 
 interface FragranceApiResponse {
@@ -146,6 +148,18 @@ export default function GlobalCatalogSection() {
   // Cargar índice de Diseñadores A-Z y Perfumistas ("La Nariz")
   useEffect(() => {
     const controller = new AbortController();
+
+    if (IS_STATIC_EXPORT) {
+      queryEncyclopediaMeta(dirLetter, dirQuery.trim())
+        .then((json) => {
+          if (!controller.signal.aborted) setMetaData(json);
+        })
+        .catch((err) => {
+          console.error('Error cargando directorio:', err);
+        });
+      return () => controller.abort();
+    }
+
     const params = new URLSearchParams({ mode: 'meta', letter: dirLetter });
     if (dirQuery.trim()) params.set('q', dirQuery.trim());
 
@@ -168,6 +182,25 @@ export default function GlobalCatalogSection() {
     async (signal?: AbortSignal) => {
       setLoading(true);
       try {
+        if (IS_STATIC_EXPORT) {
+          const json = await queryEncyclopediaSearch({
+            page,
+            limit: 16,
+            sortBy,
+            search: search.trim(),
+            family: selectedFamily,
+            brand: selectedBrand.trim(),
+            perfumer: selectedPerfumer.trim(),
+            concentration: selectedConcentration,
+            decade: selectedDecade,
+            accords: selectedAccords,
+            includeNotes,
+            excludeNotes,
+          });
+          if (!signal?.aborted) setData(json);
+          return;
+        }
+
         const params = new URLSearchParams({
           page: page.toString(),
           limit: '16',

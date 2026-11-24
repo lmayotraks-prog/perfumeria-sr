@@ -2,6 +2,7 @@
 // src/components/sections/AboutSection.tsx — SR Essences · Proceso de Compra, Pagos & Campaña Visual Dual
 import Image from 'next/image';
 import { SR_CONTACT, buildPerfumeWhatsAppUrl } from '@/lib/whatsapp';
+import { withBasePath } from '@/lib/assetPath';
 import { usePerfumeStore } from '@/hooks/usePerfumeStore';
 
 const STEPS = [
@@ -181,7 +182,7 @@ export default function AboutSection() {
               style={{ borderColor: 'var(--border-gold)' }}
             >
               <video
-                src="/videos/perfume-lumiere.mp4"
+                src={withBasePath('/videos/perfume-lumiere.mp4')}
                 autoPlay
                 loop
                 muted
@@ -206,7 +207,7 @@ export default function AboutSection() {
               style={{ borderColor: 'var(--border-gold)' }}
             >
               <video
-                src="/videos/perfume-reference.mp4"
+                src={withBasePath('/videos/perfume-reference.mp4')}
                 autoPlay
                 loop
                 muted
@@ -236,7 +237,7 @@ export default function AboutSection() {
               style={{ border: '1px solid var(--border-gold)' }}
             >
               <Image
-                src="/images/textures/fondo-beige.jpg"
+                src={withBasePath('/images/textures/fondo-beige.jpg')}
                 alt="SR Essences Sello Oficial"
                 fill
                 className="object-cover"

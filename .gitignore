@@ -12,3 +12,5 @@ Thumbs.db
 # Dataset fuente (regenerable con scripts/process-parfumo.js)
 parfumo_data_clean.csv
 .vercel
+public/data/encyclopedia.json
+.api-export-backup
